@@ -138,5 +138,105 @@
     "mordecai": "In patients with Diabetes Mellitus, the Hypertension Canada BP target is <130/80 mmHg. First-line therapy in diabetes—especially with microalbuminuria/CKD—is an ACE inhibitor or ARB (never combine an ACEi and ARB together).",
     "guidelineTitle": "Hypertension Canada: Treatment in Diabetes",
     "guidelineUrl": "https://guidelines.hypertension.ca/treatment/diabetes-mellitus/"
+  },
+  {
+    "id": "case_1793487149361_0",
+    "floor": "Floor 3: Cancer Screening",
+    "topic": "Oncology / Colorectal Family Hx",
+    "scenario": "A 41-year-old asymptomatic dungeon cartographer comes in for a periodic health visit. He mentions his mother was diagnosed with colon cancer at age 49. He has no rectal bleeding, weight loss, or change in bowel habits. Per Ontario Health (ColonCancerCheck) guidelines, what is the correct colorectal cancer screening plan?",
+    "options": [
+      "Order a Fecal Immunochemical Test (FIT) today and repeat every 2 years",
+      "Wait until age 50, then initiate colonoscopy every 10 years",
+      "Refer for a screening colonoscopy now (starting at age 39) and repeat every 5 years if normal",
+      "Order a flexible sigmoidoscopy today and repeat every 10 years"
+    ],
+    "correct": 2,
+    "aiRight": "NEW ACHIEVEMENT! 'Pedigree Mathematician!' 49 minus 10 equals 39! You skipped the FIT kit and sent him straight for his high-risk colonoscopy!",
+    "aiWrong": "TRAP TRIGGERED! A first-degree relative with colorectal cancer upgrades this Crawler out of the FIT queue and into the colonoscopy suite!",
+    "donutRight": "CARL! EVEN I CAN SUBTRACT TEN FROM FORTY-NINE! First-degree relative under 60 means colonoscopy starting 10 years earlier, repeated every 5 years!",
+    "donutWrong": "A FIT KIT FOR SOMEONE WHOSE MOTHER HAD COLON CANCER AT 49?! MONGO IS APPALLED! READ THE COLONCANCERCHECK SCROLL!",
+    "mordecai": "Patients with >=1 first-degree relative with colorectal cancer are at increased risk and should be screened with COLONOSCOPY (not FIT) starting at age 50 OR 10 years earlier than the youngest relative's diagnosis (49 - 10 = age 39). Because his mother was diagnosed before age 60, repeat colonoscopy every 5 years (if >=60 at diagnosis, repeat every 10 years).",
+    "guidelineTitle": "Ontario Health (Cancer Care Ontario): ColonCancerCheck",
+    "guidelineUrl": "https://www.cancercareontario.ca/en/types-of-cancer/colorectal/screening"
+  },
+  {
+    "id": "case_1793487149361_1",
+    "floor": "Floor 3: Cancer Screening",
+    "topic": "Oncology / Positive FIT Follow-Up",
+    "scenario": "A 63-year-old average-risk tavern keeper completes his routine biennial Fecal Immunochemical Test (FIT), and the result comes back POSITIVE (abnormal). He feels great, notes he had a small flare of his known internal hemorrhoids that day, and asks to just repeat the FIT next month once the hemorrhoids settle. What is your next step?",
+    "options": [
+      "Repeat the FIT in 4 to 6 weeks once his hemorrhoids have resolved",
+      "Refer directly for a diagnostic colonoscopy (ideally within 8 weeks); do not repeat the FIT",
+      "Reassure him that hemorrhoids explain the result and resume routine FIT in 2 years",
+      "Order a CT colonography and CEA blood test instead of colonoscopy"
+    ],
+    "correct": 1,
+    "aiRight": "NEW ACHIEVEMENT! 'No Second Takes!' You refused to repeat a positive FIT and booked the diagnostic colonoscopy!",
+    "aiWrong": "CRITICAL ERROR! You let a patient blame a positive FIT on hemorrhoids! Adenomas bleed intermittently—a repeat negative FIT gives false reassurance!",
+    "donutRight": "NEVER REPEAT A POSITIVE FIT, CARL! I don't care how many hemorrhoids the tavern keeper has, he's getting the camera!",
+    "donutWrong": "YOU REPEATED THE STOOL TEST?! CARL, IF A TRAP DETECTOR GOES OFF, YOU DON'T KICK IT UNTIL IT TURNS GREEN! SEND HIM FOR A COLONOSCOPY!",
+    "mordecai": "Golden exam rule: NEVER repeat a positive FIT, and never attribute a positive FIT solely to hemorrhoids or diet. Colorectal neoplasms bleed intermittently, so a subsequent negative FIT does not rule out cancer. Every positive FIT requires a diagnostic colonoscopy (within 8 weeks per Ontario Health standards).",
+    "guidelineTitle": "Ontario Health: Abnormal FIT Follow-Up",
+    "guidelineUrl": "https://www.cancercareontario.ca/en/guidelines-advice/types-of-cancer/colorectal"
+  },
+  {
+    "id": "case_1793487149361_2",
+    "floor": "Floor 3: Cancer Screening",
+    "topic": "Oncology / Lung Cancer Screening",
+    "scenario": "A 61-year-old guild mason with a 35 pack-year smoking history (currently smoking 1 pack/day for 35 years) has no cough, hemoptysis, or weight loss. He is worried about lung cancer and asks you to order a screening Chest X-Ray. Per CTFPHC and Ontario Lung Screening Program guidelines, what do you recommend?",
+    "options": [
+      "Order a PA and Lateral Chest X-Ray every year",
+      "Order a Chest X-Ray plus 3 morning sputum cytology samples",
+      "Do not order a Chest X-Ray; refer for Low-Dose CT (LDCT) lung screening and offer smoking cessation support",
+      "Advise him that lung cancer screening is only for former smokers who quit >15 years ago"
+    ],
+    "correct": 2,
+    "aiRight": "NEW ACHIEVEMENT! 'Low-Dose Legend!' You blocked the useless screening Chest X-Ray and sent him for Low-Dose CT!",
+    "aiWrong": "BZZZZT! Chest X-rays miss early lung nodules until they look like cannonballs! Never use CXR to screen for lung cancer!",
+    "donutRight": "LOW-DOSE CT, CARL! Ages 55 to 74 with a heavy smoking history! And take away his dungeon cigarettes while you're at it!",
+    "donutWrong": "A CHEST X-RAY FOR LUNG CANCER SCREENING?! MONGO IS APPALLED! The Task Force outlawed that ages ago, Carl!",
+    "mordecai": "Per the CTFPHC and Ontario Lung Screening Program (OLSP), adults aged 55–74 with a significant smoking history (>=30 pack-years who currently smoke or quit within 15 years; or >=20 years daily smoking in OLSP) should be screened with Low-Dose CT (LDCT). Chest X-ray (with or without sputum cytology) is explicitly NOT recommended for lung cancer screening.",
+    "guidelineTitle": "CTFPHC & Ontario Lung Screening Program (OLSP)",
+    "guidelineUrl": "https://www.cancercareontario.ca/en/types-of-cancer/lung/screening"
+  },
+  {
+    "id": "case_1793487149361_3",
+    "floor": "Floor 3: Cancer Screening",
+    "topic": "Oncology / High-Risk Breast (OBSP)",
+    "scenario": "A 34-year-old asymptomatic woman transfers to your Ontario practice. Genetic testing recently confirmed she carries a pathogenic BRCA1 mutation (she has elected to defer prophylactic mastectomy for now). Under the High-Risk Ontario Breast Screening Program (OBSP), what screening regimen is indicated?",
+    "options": [
+      "Mammogram alone every 2 years starting at age 40",
+      "Annual Mammogram AND annual Breast MRI starting now (ages 30 to 69)",
+      "Breast ultrasound every 6 months and clinical breast exam every 3 months",
+      "Annual Breast MRI alone without mammography to avoid radiation"
+    ],
+    "correct": 1,
+    "aiRight": "NEW ACHIEVEMENT! 'Dual-Modality Defender!' High-Risk OBSP pairs annual Breast MRI with annual Mammography from age 30 to 69!",
+    "aiWrong": "MISSED PROTOCOL! Dense young breast tissue + BRCA1 needs both annual MRI AND annual Mammogram starting at age 30!",
+    "donutRight": "BOTH SCANS EVERY YEAR, CARL! Ages 30 to 69 in the High-Risk OBSP! That is top-tier preventive medicine!",
+    "donutWrong": "CARL! SHE HAS A BRCA1 MUTATION! You can't give her standard average-risk screening! Put her in the High-Risk OBSP immediately!",
+    "mordecai": "The High-Risk Ontario Breast Screening Program (OBSP) covers individuals aged 30–69 who have a known pathogenic mutation (e.g., BRCA1, BRCA2, TP53, PALB2), are an untested first-degree relative of a carrier, or received chest radiation before age 30 (e.g., for Hodgkin lymphoma >=8 years ago). They receive BOTH an annual Mammogram AND an annual Breast MRI.",
+    "guidelineTitle": "Ontario Breast Screening Program (OBSP) - High Risk",
+    "guidelineUrl": "https://www.cancercareontario.ca/en/types-of-cancer/breast-cancer/screening"
+  },
+  {
+    "id": "case_1793487149361_4",
+    "floor": "Floor 3: Cancer Screening",
+    "topic": "Oncology / Prostate PSA Counseling",
+    "scenario": "A 57-year-old asymptomatic male patient with no family history of prostate cancer asks if he should get 'the routinePSA blood test' during his periodic health visit. His friends told him every man over 50 needs one annually. How should you counsel him per Canadian guidelines?",
+    "options": [
+      "Order the PSA test and perform a digital rectal exam (DRE) without further discussion since he is over 50",
+      "Engage in shared decision-making discussing the potential harms (false positives, overdiagnosis, biopsy/treatment complications) vs. the small mortality benefit",
+      "Tell him PSA testing is illegal in Ontario for asymptomatic men and refuse to order it",
+      "Order a transrectal prostate ultrasound first instead of a PSA blood test"
+    ],
+    "correct": 1,
+    "aiRight": "NEW ACHIEVEMENT! 'Master of Shared Decision-Making!' You explained overdiagnosis and biopsy harms before checking a box on the lab req!",
+    "aiWrong": "CCFP COMMUNICATION TRAP! On the licensing exam, ordering or refusing a PSA test in a 55-69-year-old without shared decision-making is an automatic point deduction!",
+    "donutRight": "TALK TO HIM FIRST, CARL! Nobody wants surprise incontinence from an indolent tumor that never would have left the dungeon!",
+    "donutWrong": "YOU JUST CHECKED THE BOX WITHOUT EXPLAINING THE HARMS?! MONGO IS APPALLED! Always counsel on false positives and overdiagnosis first!",
+    "mordecai": "High-yield CCFP counseling pearl: The CTFPHC recommends against routine population PSA screening (weak recommendation for ages 55–69; strong against <55 and >=70). However, when a patient aged 55–69 requests PSA testing, the exam expects SHARED DECISION-MAKING: discuss the high rate of false positives, overdiagnosis of slow-growing cancers, and harms of biopsy/treatment (infection, erectile dysfunction, urinary incontinence) vs. a small absolute reduction in prostate cancer death (~1 in 1,000 over 13 years).",
+    "guidelineTitle": "CTFPHC: Prostate Cancer Screening",
+    "guidelineUrl": "https://canadiantaskforce.ca/guidelines/published-guidelines/prostate-cancer/"
   }
 ]

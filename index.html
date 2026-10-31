@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clinic Blitz: Dungeon Crawler Edition v2</title>
+  <title>Clinic Blitz: Dungeon Crawler Edition v3</title>
   <style>
     * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
     body {
       background-color: #0d1117;
       color: #e6edf3;
       margin: 0;
-      padding: 20px;
+      padding: 16px;
       display: flex;
       justify-content: center;
     }
     .game-container {
-      max-width: 800px;
+      max-width: 820px;
       width: 100%;
       background: #161b22;
       border: 3px solid #f0883e;
       border-radius: 10px;
-      padding: 24px;
+      padding: 22px;
       box-shadow: 0 0 25px rgba(240, 136, 62, 0.25);
     }
     .header {
@@ -57,7 +57,7 @@
       border: 1px solid #30363d;
       color: #58a6ff;
       font-weight: bold;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
     /* MENU SCREEN */
@@ -67,21 +67,17 @@
       background: #0d1117;
       border: 1px solid #30363d;
       border-radius: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
-    .menu-hero h1 { color: #f0883e; margin: 0 0 8px 0; font-size: 1.8rem; }
-    .menu-hero p { color: #8b949e; margin: 0; font-size: 0.95rem; }
+    .menu-hero h1 { color: #f0883e; margin: 0 0 8px 0; font-size: 1.6rem; }
+    .menu-hero p { color: #8b949e; margin: 0; font-size: 0.92rem; }
     
-    .floor-grid {
-      display: grid;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
+    .floor-grid { display: grid; gap: 12px; margin-bottom: 16px; }
     .floor-card {
       background: #21262d;
       border: 2px solid #30363d;
       border-radius: 8px;
-      padding: 16px;
+      padding: 15px;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
@@ -89,7 +85,7 @@
       transition: all 0.15s;
     }
     .floor-card:hover { border-color: #f0883e; background: #292e36; }
-    .floor-card h3 { margin: 0 0 4px 0; color: #58a6ff; }
+    .floor-card h3 { margin: 0 0 4px 0; color: #58a6ff; font-size: 1.05rem; }
     .floor-card p { margin: 0; font-size: 0.85rem; color: #8b949e; }
     .badge {
       background: #f0883e;
@@ -98,6 +94,8 @@
       border-radius: 4px;
       font-weight: bold;
       font-size: 0.85rem;
+      white-space: nowrap;
+      margin-left: 10px;
     }
 
     .settings-bar {
@@ -105,10 +103,29 @@
       justify-content: space-between;
       align-items: center;
       background: #0d1117;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-radius: 6px;
       border: 1px solid #30363d;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+
+    /* LOOT BOX POPUP BANNER */
+    .loot-banner {
+      display: none;
+      background: linear-gradient(90deg, #3b2300, #5c3800);
+      border: 2px solid #ffd700;
+      color: #ffd700;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      font-weight: bold;
+      text-align: center;
+      animation: pulse 1s infinite alternate;
+    }
+    @keyframes pulse {
+      from { box-shadow: 0 0 5px rgba(255, 215, 0, 0.3); }
+      to { box-shadow: 0 0 18px rgba(255, 215, 0, 0.8); }
     }
 
     /* TIMER BAR */
@@ -152,9 +169,9 @@
       background: #0d1117;
       border-left: 4px solid #58a6ff;
       padding: 16px;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       line-height: 1.5;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       border-radius: 4px;
     }
     .options-grid { display: grid; gap: 10px; margin-bottom: 16px; }
@@ -169,7 +186,7 @@
       cursor: pointer;
     }
     button.option-btn:hover:not(:disabled) { border-color: #f0883e; background: #292e36; }
-    button.option-btn:disabled { cursor: default; opacity: 0.85; }
+    button.option-btn:disabled { cursor: default; opacity: 0.88; }
     .correct { background: #1f4429 !important; border-color: #3fb950 !important; }
     .wrong { background: #491c21 !important; border-color: #f85149 !important; }
 
@@ -231,10 +248,9 @@
     .nav-btn.primary { background: #f0883e; color: #0d1117; border-color: #f0883e; }
     .nav-btn.primary:hover { background: #ff9b54; }
 
-    /* AI FORGE MODAL */
     textarea {
       width: 100%;
-      height: 110px;
+      height: 115px;
       background: #0d1117;
       color: #58a6ff;
       border: 1px solid #30363d;
@@ -250,16 +266,18 @@
 <div class="game-container">
   <!-- TOP HEADER -->
   <div class="header">
-    <div class="title" onclick="showMenu()">⚔️ Clinic Blitz</div>
-    <div class="stats">Score: <span id="score">0</span></div>
-    <button class="nav-top-btn" id="menu-btn" onclick="showMenu()" style="display:none;">🏠 Floor Menu</button>
+    <div class="title" onclick="showMenu()">⚔️ Clinic Blitz v3</div>
+    <div class="stats">
+      Score: <span id="score">0</span> | 🔥 Streak: <span id="streak">0</span> | 🎁 Loot: <span id="loot-count">0</span>
+    </div>
+    <button class="nav-top-btn" id="menu-btn" onclick="showMenu()" style="display:none;">🏠 Menu</button>
   </div>
 
   <!-- SCREEN 1: MAIN MENU -->
   <div id="menu-screen">
     <div class="menu-hero">
       <h1>DUNGEON CRAWLER: CCFP EDITION</h1>
-      <p>"Welcome to the First Floor of Canadian Primary Care, Crawler. Try not to embarrass Mongo."</p>
+      <p>"Welcome to the Dungeon of Canadian Primary Care. Everything you import or miss is now saved permanently!"</p>
     </div>
 
     <div class="settings-bar">
@@ -268,15 +286,15 @@
     </div>
 
     <div class="settings-bar">
-      <span>📉 <strong>Tracked Weak Spots:</strong> <span id="weak-spots-text" style="color:#f85149;">None yet!</span></span>
-      <button class="nav-top-btn" onclick="clearStats()" style="font-size:0.75rem;">Reset</button>
+      <span>📉 <strong>Saved Weak Spots:</strong> <span id="weak-spots-text" style="color:#3fb950;">None yet!</span></span>
+      <button class="nav-top-btn" onclick="clearStats()" style="font-size:0.75rem;">Reset Memory</button>
     </div>
 
     <div class="floor-grid">
       <div class="floor-card" onclick="startFloor('floor1')">
         <div>
           <h3>Floor 1: Acute Walk-In & Choosing Wisely</h3>
-          <p>Back pain, asymptomatic bacteriuria, and pediatric croup.</p>
+          <p>Low back pain, asymptomatic bacteriuria, and pediatric croup.</p>
         </div>
         <span class="badge">3 Cases ➔</span>
       </div>
@@ -284,23 +302,31 @@
       <div class="floor-card" onclick="startFloor('floor2')">
         <div>
           <h3>Floor 2: Preventive Care & Ontario Guidelines</h3>
-          <p>Cervical screening, lipid targets, and hypertension management.</p>
+          <p>Hypertension diagnosis, cervical screening, AFib anticoagulation, & diabetic BP.</p>
         </div>
-        <span class="badge">2 Cases ➔</span>
+        <span class="badge">4 Cases ➔</span>
+      </div>
+
+      <div class="floor-card" onclick="startFloor('custom')" style="border-color:#a371f7;">
+        <div>
+          <h3 style="color:#a371f7;">📦 Floor 3: Your Custom AI Vault</h3>
+          <p>All custom cases you've generated & saved via the AI Forge.</p>
+        </div>
+        <span class="badge" id="custom-count-badge" style="background:#a371f7; color:#0d1117;">0 Saved ➔</span>
       </div>
 
       <div class="floor-card" onclick="startFloor('weaknesses')" style="border-color:#f85149;">
         <div>
           <h3 style="color:#f85149;">🔥 Boss Room: Missed & Timed-Out Cases</h3>
-          <p>Dynamically drills the exact cases you got wrong or ran out of time on.</p>
+          <p>Dynamically drills the exact cases you missed across all floors.</p>
         </div>
-        <span class="badge" style="background:#f85149; color:#fff;">Adaptive ➔</span>
+        <span class="badge" id="weak-count-badge" style="background:#f85149; color:#fff;">0 Missed ➔</span>
       </div>
 
       <div class="floor-card" onclick="showForge()" style="border-color:#3fb950;">
         <div>
-          <h3 style="color:#3fb950;">✨ The AI Question Forge (On-The-Fly Builder)</h3>
-          <p>See how dynamic AI generation works & add new questions based on your weak spots!</p>
+          <h3 style="color:#3fb950;">✨ The AI Question Forge (Build & Save Cases)</h3>
+          <p>Generate new cases on any CCFP topic or weak spot & save them to Floor 3!</p>
         </div>
         <span class="badge" style="background:#3fb950;">Open Forge ➔</span>
       </div>
@@ -309,6 +335,8 @@
 
   <!-- SCREEN 2: GAMEPLAY -->
   <div id="game-screen" style="display:none;">
+    <div id="loot-banner" class="loot-banner"></div>
+
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span class="topic-tag" id="topic-tag">Topic</span>
       <span style="font-size:0.9rem; color:#8b949e;">Case <span id="case-num">1</span> of <span id="case-total">3</span></span>
@@ -339,7 +367,6 @@
       </div>
     </div>
 
-    <!-- BACK AND FORWARD NAVIGATION -->
     <div class="nav-bar">
       <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">⬅ Previous Case</button>
       <button class="nav-btn primary" id="next-btn" onclick="nextQuestion()">Next Case ➔</button>
@@ -350,26 +377,28 @@
   <div id="forge-screen" style="display:none;">
     <h2 style="color:#3fb950; margin-top:0;">✨ The AI Question Forge</h2>
     <p style="font-size:0.9rem; color:#8b949e;">
-      Want to see how a game generates tailored questions on the fly? Below is a live prompt generated from your current weak spots. 
-      <strong>Step 1:</strong> Copy this prompt and paste it into Gemini (or any AI).
+      <strong>Optional:</strong> Type any specific CCFP topic below (or leave blank to automatically target your Weak Spots):
     </p>
+    <input type="text" id="custom-topic-input" placeholder="e.g., Prenatal care, COPD, Pediatric fever, Depression..." 
+      style="width:100%; padding:10px; background:#0d1117; color:#e6edf3; border:1px solid #30363d; border-radius:6px; margin-bottom:10px;"
+      oninput="updateForgePrompt()">
+
     <textarea id="ai-prompt-box" readonly></textarea>
-    <button class="nav-top-btn" onclick="copyPrompt()" style="margin-bottom:16px;">📋 Copy Prompt</button>
+    <button class="nav-top-btn" onclick="copyPrompt()" style="margin-bottom:16px;">📋 Step 1: Copy Prompt for AI</button>
 
     <p style="font-size:0.9rem; color:#8b949e;">
-      <strong>Step 2:</strong> Paste the JSON code the AI gives you into the box below and click <strong>Import into Game</strong>—it will instantly become playable!
+      <strong>Step 2:</strong> Paste the AI's JSON response below. It will automatically repair minor bracket errors and save the cases permanently into <strong>Floor 3</strong>!
     </p>
-    <textarea id="ai-import-box" placeholder='Paste the AI JSON output here...'></textarea>
+    <textarea id="ai-import-box" placeholder="Paste the AI JSON output here..."></textarea>
     <div class="nav-bar">
       <button class="nav-btn" onclick="showMenu()">⬅ Back to Menu</button>
-      <button class="nav-btn primary" onclick="importCustomQuestions()">⚡ Import & Play New Cases</button>
+      <button class="nav-btn primary" onclick="importCustomQuestions()">⚡ Save & Play New Cases</button>
     </div>
   </div>
 </div>
 
 <script>
-  // QUESTION DATABASE WITH CANADIAN GUIDELINES
-  const allQuestions = [
+  const defaultQuestions = [
     {
       id: "f1_1",
       floor: "floor1",
@@ -443,10 +472,10 @@
       ],
       correct: 1,
       aiRight: "NEW ACHIEVEMENT! 'White-Coat Detector!' You confirmed the diagnosis with out-of-office readings before sentencing him to lifelong pills!",
-      aiWrong: "TRAP TRIGGERED! Unless BP is ≥180/110 mmHg or there's hypertensive urgency/target organ damage, you don't diagnose on Visit 1 without out-of-office confirmation!",
+      aiWrong: "TRAP TRIGGERED! Unless BP is >=180/110 mmHg or there's hypertensive urgency/target organ damage, you don't diagnose on Visit 1 without out-of-office confirmation!",
       donutRight: "Obviously his blood pressure is high, Carl—he's in a fluorescent-lit clinic! Check it at home where there's a cat on his lap!",
       donutWrong: "CARL! You're diagnosing him off ONE reading?! Even my groomer takes two measurements before trimming my whiskers!",
-      mordecai: "Per Hypertension Canada: If Visit 1 AOBP is 140–179 / 90–109 mmHg, out-of-office measurement (ABPM or HBPM) is preferred before Visit 2 to rule out white-coat hypertension (Diagnostic thresholds: ABPM awake mean ≥135/85 or 24h ≥130/80; HBPM ≥135/85).",
+      mordecai: "Per Hypertension Canada: If Visit 1 AOBP is 140–179 / 90–109 mmHg, out-of-office measurement (ABPM or HBPM) is preferred before Visit 2 to rule out white-coat hypertension (Diagnostic thresholds: ABPM awake mean >=135/85 or 24h >=130/80; HBPM >=135/85).",
       guidelineTitle: "Hypertension Canada Guidelines",
       guidelineUrl: "https://guidelines.hypertension.ca/diagnosis-assessment/measuring-blood-pressure/"
     },
@@ -469,22 +498,79 @@
       mordecai: "Both the Canadian Task Force on Preventive Health Care (CTFPHC) and Ontario Health (Cancer Care Ontario) Cervical Screening Program recommend starting routine cervical screening at age 25 (regardless of HPV vaccination status) for asymptomatic, immunocompetent individuals.",
       guidelineTitle: "Ontario Health (Cancer Care Ontario) Cervical Screening",
       guidelineUrl: "https://www.cancercareontario.ca/en/types-of-cancer/cervical/screening"
+    },
+    {
+      id: "f2_3",
+      floor: "floor2",
+      topic: "Cardiology / Atrial Fibrillation",
+      scenario: "A 71-year-old dungeon blacksmith presents with newly diagnosed non-valvular atrial fibrillation. He has hypertension and Type 2 diabetes, no prior stroke, and normal renal function. He asks if he can just take a daily Baby Aspirin (ASA 81mg) to prevent a stroke. Per Canadian Cardiovascular Society (CCS) guidelines, what do you advise?",
+      options: [
+        "Agree to ASA 81mg daily since his stroke risk is moderate",
+        "Start a Direct Oral Anticoagulant (DOAC) such as Apixaban or Rivaroxaban",
+        "Start Warfarin targeting an INR of 2.0 to 3.0 as first-line over DOACs",
+        "Start dual antiplatelet therapy with ASA 81mg and Clopidogrel 75mg"
+      ],
+      correct: 1,
+      aiRight: "NEW ACHIEVEMENT! 'CHADS-65 Champion!' You tossed the baby aspirin in the trash and gave him real stroke protection!",
+      aiWrong: "STROKE HAZARD! Using aspirin alone for AFib stroke prevention is like wearing a paper helmet against a Boss Goblin!",
+      donutRight: "CARL! EVEN I KNOW THE CANADIAN CHADS-65 ALGORITHM! He's over 65 with hypertension and diabetes—give the man a proper DOAC!",
+      donutWrong: "ASPIRIN FOR ATRIAL FIBRILLATION?! MONGO IS APPALLED! What year is it, Carl, 1998?!",
+      mordecai: "Under the CCS 'CHADS-65' algorithm, any patient with non-valvular AFib who is age >=65 OR has any CHADS2 risk factor (CHF, Hypertension, Diabetes, prior Stroke/TIA) should receive oral anticoagulation. DOACs are strongly preferred over Warfarin. Aspirin monotherapy is NOT recommended.",
+      guidelineTitle: "CCS Atrial Fibrillation Guidelines (CHADS-65)",
+      guidelineUrl: "https://ccs.ca/guideline/2020-atrial-fibrillation/"
+    },
+    {
+      id: "f2_4",
+      floor: "floor2",
+      topic: "Cardiology / Hypertension",
+      scenario: "A 52-year-old elf rogue with Type 2 diabetes and microalbuminuria is diagnosed with hypertension (BP 148/92 mmHg). His potassium and creatinine are normal. Per Hypertension Canada and Diabetes Canada guidelines, what is both his target blood pressure and preferred first-line medication?",
+      options: [
+        "Target <140/90 mmHg; start a beta-blocker (Metoprolol)",
+        "Target <130/80 mmHg; start an ACE inhibitor or ARB",
+        "Target <120/80 mmHg; start a loop diuretic (Furosemide)",
+        "Target <140/90 mmHg; start a thiazide diuretic alone"
+      ],
+      correct: 1,
+      aiRight: "NEW ACHIEVEMENT! 'Nephron Bodyguard!' You protected those diabetic glomeruli with an ACEi/ARB and nailed the <130/80 target!",
+      aiWrong: "NEPHROLOGY WEEPS! A patient with diabetes had protein in his urine and you didn't reach for an ACE inhibitor or ARB, Crawler!",
+      donutRight: "PROTECT THE KIDNEYS, CARL! Everyone knows diabetes gets the <130/80 target and an ACE or ARB!",
+      donutWrong: "CARL! HIS KIDNEYS ARE LEAKING PROTEIN AND YOU PICKED THE WRONG POTION! Read the Hypertension Canada scroll again!",
+      mordecai: "In patients with Diabetes Mellitus, the Hypertension Canada BP target is <130/80 mmHg. First-line therapy in diabetes—especially with microalbuminuria/CKD—is an ACE inhibitor or ARB (never combine an ACEi and ARB together).",
+      guidelineTitle: "Hypertension Canada: Treatment in Diabetes",
+      guidelineUrl: "https://guidelines.hypertension.ca/treatment/diabetes-mellitus/"
     }
   ];
 
-  // GAME STATE
+  // LOAD SAVED DATA FROM BROWSER MEMORY (localStorage)
+  let savedCustomQuestions = JSON.parse(localStorage.getItem("cb_custom_questions") || "[]");
+  let allQuestions = [...defaultQuestions, ...savedCustomQuestions];
+  let missedQuestionIds = new Set(JSON.parse(localStorage.getItem("cb_missed_ids") || "[]"));
+  let weakTopics = new Set(JSON.parse(localStorage.getItem("cb_weak_topics") || "[]"));
+  let score = parseInt(localStorage.getItem("cb_score") || "0", 10);
+  let streak = parseInt(localStorage.getItem("cb_streak") || "0", 10);
+  let lootCount = parseInt(localStorage.getItem("cb_loot") || "0", 10);
+
   let activeDeck = [];
   let currentIdx = 0;
-  let score = 0;
   let timerEnabled = true;
   let timerInterval = null;
   let timeLeft = 30;
-  
-  // Tracks answers in current run so Back/Next buttons remember your choices!
-  let answeredHistory = {}; 
-  // Tracks missed topics across runs
-  let missedQuestionIds = new Set();
-  let weakTopics = new Set();
+  let answeredHistory = {};
+
+  function saveStateToDisk() {
+    localStorage.setItem("cb_custom_questions", JSON.stringify(savedCustomQuestions));
+    localStorage.setItem("cb_missed_ids", JSON.stringify(Array.from(missedQuestionIds)));
+    localStorage.setItem("cb_weak_topics", JSON.stringify(Array.from(weakTopics)));
+    localStorage.setItem("cb_score", score.toString());
+    localStorage.setItem("cb_streak", streak.toString());
+    localStorage.setItem("cb_loot", lootCount.toString());
+  }
+
+  function updateHeaderUI() {
+    document.getElementById("score").innerText = score;
+    document.getElementById("streak").innerText = streak;
+    document.getElementById("loot-count").innerText = lootCount;
+  }
 
   function showMenu() {
     clearInterval(timerInterval);
@@ -493,6 +579,7 @@
     document.getElementById("forge-screen").style.display = "none";
     document.getElementById("menu-btn").style.display = "none";
     updateWeakSpotsDisplay();
+    updateHeaderUI();
   }
 
   function toggleTimerSetting() {
@@ -511,13 +598,21 @@
       el.innerText = Array.from(weakTopics).join(", ");
       el.style.color = "#f85149";
     }
+    document.getElementById("custom-count-badge").innerText = savedCustomQuestions.length + " Saved ➔";
+    document.getElementById("weak-count-badge").innerText = missedQuestionIds.size + " Missed ➔";
   }
 
   function clearStats() {
+    if (!confirm("Reset your score, weak spots, and custom questions?")) return;
+    localStorage.clear();
+    savedCustomQuestions = [];
+    allQuestions = [...defaultQuestions];
     missedQuestionIds.clear();
     weakTopics.clear();
     score = 0;
-    document.getElementById("score").innerText = "0";
+    streak = 0;
+    lootCount = 0;
+    updateHeaderUI();
     updateWeakSpotsDisplay();
   }
 
@@ -525,7 +620,13 @@
     if (floorName === "weaknesses") {
       activeDeck = allQuestions.filter(q => missedQuestionIds.has(q.id));
       if (activeDeck.length === 0) {
-        alert("You haven't missed any questions yet! Play Floor 1 or Floor 2 first, or miss one on purpose to test the Boss Room.");
+        alert("Your Boss Room is empty! You have 0 missed cases right now.");
+        return;
+      }
+    } else if (floorName === "custom") {
+      activeDeck = savedCustomQuestions;
+      if (activeDeck.length === 0) {
+        alert("Your Custom AI Vault is empty! Click 'The AI Question Forge' below to generate and save your own cases.");
         return;
       }
     } else {
@@ -543,14 +644,14 @@
 
   function loadQuestion() {
     clearInterval(timerInterval);
+    document.getElementById("loot-banner").style.display = "none";
     const q = activeDeck[currentIdx];
     
-    document.getElementById("topic-tag").innerText = q.topic;
+    document.getElementById("topic-tag").innerText = q.topic || "Clinical Case";
     document.getElementById("case-num").innerText = currentIdx + 1;
     document.getElementById("case-total").innerText = activeDeck.length;
     document.getElementById("scenario-text").innerText = q.scenario;
     
-    // Update Back / Next buttons
     document.getElementById("prev-btn").disabled = (currentIdx === 0);
     document.getElementById("next-btn").innerText = (currentIdx === activeDeck.length - 1) ? "Finish Floor 🏁" : "Next Case ➔";
 
@@ -574,7 +675,6 @@
       container.appendChild(btn);
     });
 
-    // If already answered, show feedback immediately without starting timer
     if (previousAnswer !== undefined) {
       document.getElementById("timer-wrapper").style.display = "none";
       renderFeedback(q, previousAnswer === q.correct, previousAnswer === -1);
@@ -597,7 +697,7 @@
       updateTimerUI();
       if (timeLeft <= 0) {
         clearInterval(timerInterval);
-        checkAnswer(-1); // -1 means timed out!
+        checkAnswer(-1);
       }
     }, 1000);
   }
@@ -628,20 +728,31 @@
     const isCorrect = (selectedIdx === q.correct);
     if (isCorrect) {
       score += 100;
-      document.getElementById("score").innerText = score;
+      streak += 1;
       missedQuestionIds.delete(q.id);
+      if (streak > 0 && streak % 2 === 0) {
+        lootCount += 1;
+        const tiers = ["BRONZE CLINICAL LOOT BOX", "SILVER OHIP BILLING BOX", "GOLD SPECIALIST LOOT BOX", "CELESTIAL CCFP EXAMINER BOX"];
+        const boxName = tiers[Math.min(Math.floor(streak / 2) - 1, tiers.length - 1)];
+        const banner = document.getElementById("loot-banner");
+        banner.innerText = `🎁 ${streak}-CASE STREAK! YOU EARNED A ${boxName}!`;
+        banner.style.display = "block";
+      }
     } else {
+      streak = 0;
       missedQuestionIds.add(q.id);
       weakTopics.add(q.topic);
     }
 
+    saveStateToDisk();
+    updateHeaderUI();
     renderFeedback(q, isCorrect, selectedIdx === -1);
   }
 
   function renderFeedback(q, isCorrect, timedOut) {
     if (timedOut) {
-      document.getElementById("ai-text").innerText = "⏰ TIME'S UP, CRAWLER! The patient left the walk-in clinic and wrote a 1-star Google review! " + q.aiWrong;
-      document.getElementById("donut-text").innerText = "CARL! YOU FROZE! NEVER FREEZE IN THE DUNGEON! " + q.donutWrong;
+      document.getElementById("ai-text").innerText = "⏰ TIME'S UP, CRAWLER! " + q.aiWrong;
+      document.getElementById("donut-text").innerText = "CARL! YOU FROZE! " + q.donutWrong;
     } else if (isCorrect) {
       document.getElementById("ai-text").innerText = q.aiRight;
       document.getElementById("donut-text").innerText = q.donutRight;
@@ -652,8 +763,8 @@
 
     document.getElementById("mordecai-text").innerText = q.mordecai;
     const link = document.getElementById("guideline-link");
-    link.innerText = "📄 " + q.guidelineTitle + " ↗";
-    link.href = q.guidelineUrl;
+    link.innerText = "📄 " + (q.guidelineTitle || "View Canadian Guideline") + " ↗";
+    link.href = q.guidelineUrl || "https://choosingwiselycanada.org/";
     document.getElementById("feedback-area").style.display = "block";
   }
 
@@ -673,22 +784,23 @@
     }
   }
 
-  // AI QUESTION FORGE FUNCTIONS
   function showForge() {
     document.getElementById("menu-screen").style.display = "none";
     document.getElementById("forge-screen").style.display = "block";
     document.getElementById("menu-btn").style.display = "inline-block";
+    updateForgePrompt();
+  }
 
-    const topicsToTarget = weakTopics.size > 0 
-      ? Array.from(weakTopics).join(", ") 
-      : "Canadian Family Medicine high-yield licensing exam topics (e.g., Diabetes Canada, CCS Atrial Fibrillation, Pediatric Fever, or OB/GYN)";
+  function updateForgePrompt() {
+    const customInput = document.getElementById("custom-topic-input").value.trim();
+    const topicsToTarget = customInput 
+      ? customInput 
+      : (weakTopics.size > 0 ? Array.from(weakTopics).join(", ") : "High-yield Canadian Family Medicine (CCFP) licensing exam topics");
 
-    const promptText = `Generate 2 new clinical multiple-choice scenarios for my Dungeon Crawler Carl-themed Canadian Family Medicine exam game focusing on: ${topicsToTarget}.
+    const promptText = `Generate 3 new clinical multiple-choice scenarios for my Dungeon Crawler Carl-themed Canadian Family Medicine exam game focusing on: ${topicsToTarget}.
 Use Canadian / Ontario guidelines. Output ONLY valid JSON as an array of objects with this exact structure (no markdown backticks):
 [
   {
-    "id": "custom_1",
-    "floor": "custom",
     "topic": "Topic Name",
     "scenario": "Clinical scenario text...",
     "options": ["Option A", "Option B", "Option C", "Option D"],
@@ -709,20 +821,29 @@ Use Canadian / Ontario guidelines. Output ONLY valid JSON as an array of objects
     const box = document.getElementById("ai-prompt-box");
     box.select();
     navigator.clipboard.writeText(box.value);
-    alert("Prompt copied! Paste it into Gemini to generate new cases on the fly.");
+    alert("Prompt copied! Paste it into Gemini to generate your new cases.");
   }
 
+  // BULLETPROOF JSON REPAIR & PERMANENT SAVE
   function importCustomQuestions() {
-    const raw = document.getElementById("ai-import-box").value.trim();
+    let raw = document.getElementById("ai-import-box").value.trim();
     if (!raw) return alert("Paste the JSON from the AI first!");
     try {
-      const cleaned = raw.replace(/```json/g, "").replace(/```/g, "").trim();
-      const newCases = JSON.parse(cleaned);
+      raw = raw.replace(/```json/gi, "").replace(/```/g, "").trim();
+      const firstBrace = raw.indexOf("{");
+      const lastBrace = raw.lastIndexOf("}");
+      if (firstBrace !== -1 && lastBrace !== -1) {
+        raw = "[" + raw.substring(firstBrace, lastBrace + 1) + "]";
+      }
+      const newCases = JSON.parse(raw);
       newCases.forEach((c, i) => {
         c.id = "custom_" + Date.now() + "_" + i;
         c.floor = "custom";
+        savedCustomQuestions.push(c);
         allQuestions.push(c);
       });
+      saveStateToDisk();
+      document.getElementById("ai-import-box").value = "";
       activeDeck = newCases;
       currentIdx = 0;
       answeredHistory = {};
@@ -730,9 +851,11 @@ Use Canadian / Ontario guidelines. Output ONLY valid JSON as an array of objects
       document.getElementById("game-screen").style.display = "block";
       loadQuestion();
     } catch (e) {
-      alert("Oops! Make sure you pasted only the [ ... ] JSON block from the AI.");
+      alert("Could not read the JSON. Make sure you copied the full block from the AI!");
     }
   }
+
+  showMenu();
 </script>
 
 </body>

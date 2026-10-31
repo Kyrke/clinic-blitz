@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinic Blitz: Dungeon Crawler Edition v2</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
+    body {
+      background-color: #0d1117;
+      color: #e6edf3;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .game-container {
+      max-width: 800px;
+      width: 100%;
+      background: #161b22;
+      border: 3px solid #f0883e;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 0 25px rgba(240, 136, 62, 0.25);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px dashed #30363d;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .title {
+      color: #f0883e;
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .nav-top-btn {
+      background: #21262d;
+      color: #e6edf3;
+      border: 1px solid #f0883e;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .nav-top-btn:hover { background: #30363d; }
+    .stats {
+      background: #21262d;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #30363d;
+      color: #58a6ff;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    /* MENU SCREEN */
+    .menu-hero {
+      text-align: center;
+      padding: 16px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .menu-hero h1 { color: #f0883e; margin: 0 0 8px 0; font-size: 1.8rem; }
+    .menu-hero p { color: #8b949e; margin: 0; font-size: 0.95rem; }
+    
+    .floor-grid {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .floor-card {
+      background: #21262d;
+      border: 2px solid #30363d;
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.15s;
+    }
+    .floor-card:hover { border-color: #f0883e; background: #292e36; }
+    .floor-card h3 { margin: 0 0 4px 0; color: #58a6ff; }
+    .floor-card p { margin: 0; font-size: 0.85rem; color: #8b949e; }
+    .badge {
+      background: #f0883e;
+      color: #0d1117;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+
+    .settings-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #0d1117;
+      padding: 12px 16px;
+      border-radius: 6px;
+      border: 1px solid #30363d;
+      margin-bottom: 16px;
+    }
+
+    /* TIMER BAR */
+    .timer-wrapper {
+      margin-bottom: 14px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      overflow: hidden;
+      height: 24px;
+      position: relative;
+    }
+    .timer-fill {
+      background: #3fb950;
+      height: 100%;
+      width: 100%;
+      transition: width 1s linear, background-color 0.3s;
+    }
+    .timer-text {
+      position: absolute;
+      top: 2px;
+      left: 10px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #ffffff;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    /* QUESTION AREA */
+    .topic-tag {
+      display: inline-block;
+      background: #30363d;
+      color: #f0883e;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .scenario-box {
+      background: #0d1117;
+      border-left: 4px solid #58a6ff;
+      padding: 16px;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      margin-bottom: 18px;
+      border-radius: 4px;
+    }
+    .options-grid { display: grid; gap: 10px; margin-bottom: 16px; }
+    button.option-btn {
+      background: #21262d;
+      color: #e6edf3;
+      border: 2px solid #30363d;
+      padding: 13px;
+      text-align: left;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button.option-btn:hover:not(:disabled) { border-color: #f0883e; background: #292e36; }
+    button.option-btn:disabled { cursor: default; opacity: 0.85; }
+    .correct { background: #1f4429 !important; border-color: #3fb950 !important; }
+    .wrong { background: #491c21 !important; border-color: #f85149 !important; }
+
+    /* FEEDBACK */
+    .feedback-area {
+      display: none;
+      margin-top: 16px;
+      border-top: 2px dashed #30363d;
+      padding-top: 16px;
+    }
+    .char-box {
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+    .ai-box { background: #2b1d0e; border: 1px solid #f0883e; color: #ffdfb6; }
+    .donut-box { background: #2d162c; border: 1px solid #db61a2; color: #f7cee2; }
+    .mordecai-box { background: #12261e; border: 1px solid #3fb950; color: #aff5b4; }
+    .char-name { font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 4px; }
+    
+    .guideline-link {
+      display: inline-block;
+      margin-top: 10px;
+      background: #1f4429;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid #3fb950;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+    .guideline-link:hover { background: #2ea043; }
+
+    /* BOTTOM NAVIGATION BAR */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #30363d;
+    }
+    .nav-btn {
+      flex: 1;
+      background: #21262d;
+      color: #e6edf3;
+      border: 2px solid #58a6ff;
+      padding: 12px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .nav-btn:hover:not(:disabled) { background: #30363d; }
+    .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; border-color: #30363d; }
+    .nav-btn.primary { background: #f0883e; color: #0d1117; border-color: #f0883e; }
+    .nav-btn.primary:hover { background: #ff9b54; }
+
+    /* AI FORGE MODAL */
+    textarea {
+      width: 100%;
+      height: 110px;
+      background: #0d1117;
+      color: #58a6ff;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="game-container">
+  <!-- TOP HEADER -->
+  <div class="header">
+    <div class="title" onclick="showMenu()">⚔️ Clinic Blitz</div>
+    <div class="stats">Score: <span id="score">0</span></div>
+    <button class="nav-top-btn" id="menu-btn" onclick="showMenu()" style="display:none;">🏠 Floor Menu</button>
+  </div>
+
+  <!-- SCREEN 1: MAIN MENU -->
+  <div id="menu-screen">
+    <div class="menu-hero">
+      <h1>DUNGEON CRAWLER: CCFP EDITION</h1>
+      <p>"Welcome to the First Floor of Canadian Primary Care, Crawler. Try not to embarrass Mongo."</p>
+    </div>
+
+    <div class="settings-bar">
+      <span>⏱️ <strong>Blitz Timer (30s per case):</strong></span>
+      <button class="nav-top-btn" id="timer-toggle-btn" onclick="toggleTimerSetting()">ON</button>
+    </div>
+
+    <div class="settings-bar">
+      <span>📉 <strong>Tracked Weak Spots:</strong> <span id="weak-spots-text" style="color:#f85149;">None yet!</span></span>
+      <button class="nav-top-btn" onclick="clearStats()" style="font-size:0.75rem;">Reset</button>
+    </div>
+
+    <div class="floor-grid">
+      <div class="floor-card" onclick="startFloor('floor1')">
+        <div>
+          <h3>Floor 1: Acute Walk-In & Choosing Wisely</h3>
+          <p>Back pain, asymptomatic bacteriuria, and pediatric croup.</p>
+        </div>
+        <span class="badge">3 Cases ➔</span>
+      </div>
+
+      <div class="floor-card" onclick="startFloor('floor2')">
+        <div>
+          <h3>Floor 2: Preventive Care & Ontario Guidelines</h3>
+          <p>Cervical screening, lipid targets, and hypertension management.</p>
+        </div>
+        <span class="badge">2 Cases ➔</span>
+      </div>
+
+      <div class="floor-card" onclick="startFloor('weaknesses')" style="border-color:#f85149;">
+        <div>
+          <h3 style="color:#f85149;">🔥 Boss Room: Missed & Timed-Out Cases</h3>
+          <p>Dynamically drills the exact cases you got wrong or ran out of time on.</p>
+        </div>
+        <span class="badge" style="background:#f85149; color:#fff;">Adaptive ➔</span>
+      </div>
+
+      <div class="floor-card" onclick="showForge()" style="border-color:#3fb950;">
+        <div>
+          <h3 style="color:#3fb950;">✨ The AI Question Forge (On-The-Fly Builder)</h3>
+          <p>See how dynamic AI generation works & add new questions based on your weak spots!</p>
+        </div>
+        <span class="badge" style="background:#3fb950;">Open Forge ➔</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: GAMEPLAY -->
+  <div id="game-screen" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span class="topic-tag" id="topic-tag">Topic</span>
+      <span style="font-size:0.9rem; color:#8b949e;">Case <span id="case-num">1</span> of <span id="case-total">3</span></span>
+    </div>
+
+    <div class="timer-wrapper" id="timer-wrapper">
+      <div class="timer-fill" id="timer-fill"></div>
+      <div class="timer-text" id="timer-text">30s remaining</div>
+    </div>
+
+    <div class="scenario-box" id="scenario-text"></div>
+    <div class="options-grid" id="options-container"></div>
+
+    <div class="feedback-area" id="feedback-area">
+      <div class="char-box ai-box">
+        <span class="char-name">📢 THE SYSTEM AI:</span>
+        <span id="ai-text"></span>
+      </div>
+      <div class="char-box donut-box">
+        <span class="char-name">👑 PRINCESS DONUT (GC, BWR, NW):</span>
+        <span id="donut-text"></span>
+      </div>
+      <div class="char-box mordecai-box">
+        <span class="char-name">🧪 MORDECAI'S CLINICAL PEARL:</span>
+        <span id="mordecai-text"></span>
+        <br>
+        <a id="guideline-link" class="guideline-link" href="#" target="_blank">📄 View Canadian / Ontario Guideline ↗</a>
+      </div>
+    </div>
+
+    <!-- BACK AND FORWARD NAVIGATION -->
+    <div class="nav-bar">
+      <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">⬅ Previous Case</button>
+      <button class="nav-btn primary" id="next-btn" onclick="nextQuestion()">Next Case ➔</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: AI QUESTION FORGE -->
+  <div id="forge-screen" style="display:none;">
+    <h2 style="color:#3fb950; margin-top:0;">✨ The AI Question Forge</h2>
+    <p style="font-size:0.9rem; color:#8b949e;">
+      Want to see how a game generates tailored questions on the fly? Below is a live prompt generated from your current weak spots. 
+      <strong>Step 1:</strong> Copy this prompt and paste it into Gemini (or any AI).
+    </p>
+    <textarea id="ai-prompt-box" readonly></textarea>
+    <button class="nav-top-btn" onclick="copyPrompt()" style="margin-bottom:16px;">📋 Copy Prompt</button>
+
+    <p style="font-size:0.9rem; color:#8b949e;">
+      <strong>Step 2:</strong> Paste the JSON code the AI gives you into the box below and click <strong>Import into Game</strong>—it will instantly become playable!
+    </p>
+    <textarea id="ai-import-box" placeholder='Paste the AI JSON output here...'></textarea>
+    <div class="nav-bar">
+      <button class="nav-btn" onclick="showMenu()">⬅ Back to Menu</button>
+      <button class="nav-btn primary" onclick="importCustomQuestions()">⚡ Import & Play New Cases</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // QUESTION DATABASE WITH CANADIAN GUIDELINES
+  const allQuestions = [
+    {
+      id: "f1_1",
+      floor: "floor1",
+      topic: "MSK / Choosing Wisely",
+      scenario: "A 42-year-old warehouse worker stumbles into clinic with 4 days of acute paraspinal low back pain after lifting a heavy crate. No saddle anesthesia, no bowel/bladder symptoms, no fever, normal neuro exam. He demands an urgent lumbar MRI. What is your move, Crawler?",
+      options: [
+        "Order a stat Lumbosacral MRI to appease him",
+        "Order plain X-rays of the lumbar spine first",
+        "Reassure, advise staying active, and recommend NSAIDs/acetaminophen without imaging",
+        "Prescribe a 10-day course of oral prednisone and strict bed rest"
+      ],
+      correct: 2,
+      aiRight: "NEW ACHIEVEMENT! 'Radiology Gatekeeper!' You protected OHIP from another useless lumbar spine scan!",
+      aiWrong: "NEW ACHIEVEMENT! 'Incidentaloma Hunter!' You ordered unnecessary spinal imaging! Enjoy explaining an irrelevant bulging disc for the next 6 years!",
+      donutRight: "CARL! LOOK! HE ACTUALLY READ THE CHOOSING WISELY SCROLLS! Even Mongo knows you don't image uncomplicated back pain before 6 weeks!",
+      donutWrong: "REALLY, CARL?! IMAGING ON DAY FOUR WITH ZERO RED FLAGS?! MONGO IS APPALLED!",
+      mordecai: "Acute mechanical low back pain (<6 weeks) without red flags (cauda equina, fracture, cancer, infection) does not warrant imaging. First-line is reassurance, staying active (avoid bed rest), and simple analgesia.",
+      guidelineTitle: "Choosing Wisely Canada & Ontario CEP: Low Back Pain",
+      guidelineUrl: "https://choosingwiselycanada.org/recommendation/family-medicine/"
+    },
+    {
+      id: "f1_2",
+      floor: "floor1",
+      topic: "Infectious Disease / Geriatrics",
+      scenario: "A 74-year-old retired wizard living independently comes in for a routine BP check. His daughter asked for a urine culture because his urine 'smelled funny.' It grows >10^8 CFU/L of E. coli. He has zero dysuria, frequency, urgency, delirium, or fever. What do you do?",
+      options: [
+        "Prescribe Nitrofurantoin 100mg BID for 5 days",
+        "Prescribe TMP-SMX DS BID for 3 days",
+        "Do not treat with antibiotics; educate on asymptomatic bacteriuria",
+        "Repeat the urine culture in 48 hours to confirm clearance"
+      ],
+      correct: 2,
+      aiRight: "NEW ACHIEVEMENT! 'Defender of the Microbiome!' You left peaceful bladder bacteria alone! No C. diff for Grandpa today!",
+      aiWrong: "BZZZZT! You just nuked harmless colonizing bacteria! Somewhere in the dungeon, multi-drug resistant E. coli just leveled up!",
+      donutRight: "THANK GOODNESS. If people prescribed me pills every time my litter box smelled funny, I'd be glowing in the dark, Carl!",
+      donutWrong: "CARL, HE DOESN'T EVEN HAVE SYMPTOMS! Why are you throwing potions at a healthy wizard?! UNACCEPTABLE!",
+      mordecai: "Never screen for or treat asymptomatic bacteriuria in non-pregnant adults, older adults, or catheterized patients. Only screen and treat in pregnancy or prior to urologic procedures with mucosal bleeding.",
+      guidelineTitle: "Choosing Wisely Canada / AMMI Canada: Asymptomatic Bacteriuria",
+      guidelineUrl: "https://choosingwiselycanada.org/pamphlet/antibiotics-for-urinary-tract-infections-in-older-people/"
+    },
+    {
+      id: "f1_3",
+      floor: "floor1",
+      topic: "Pediatrics / Respirology",
+      scenario: "A 3-year-old wakes up at 2:00 AM with a seal-like barking cough, hoarse voice, and inspiratory stridor at rest. Temp is 38.2°C. He is alert and not cyanotic. What is the single most critical medication to administer in every case of croup?",
+      options: [
+        "Salbutamol (Ventolin) via MDI with spacer",
+        "Single dose of oral Dexamethasone (0.6 mg/kg)",
+        "Oral Amoxicillin 80 mg/kg/day",
+        "Nebulized hypertonic saline alone"
+      ],
+      correct: 1,
+      aiRight: "NEW ACHIEVEMENT! 'Silencer of the Barking Seal!' Corticosteroids reduce subglottic edema within hours!",
+      aiWrong: "OOF! That's viral croup, Crawler! Subglottic swelling doesn't care about your salbutamol or amoxicillin!",
+      donutRight: "FINALLY! That barking noise sounded dangerously close to a Cocker Spaniel, Carl. Fix it immediately!",
+      donutWrong: "IS THAT A DOG BARKING?! CARL, STOP GIVING IT ASTHMA PUFFERS AND USE DEXAMETHASONE!",
+      mordecai: "All children with croup (mild, moderate, or severe) should receive a single dose of oral Dexamethasone (0.6 mg/kg, max 10-12 mg). Because this child also has stridor at rest (moderate/severe), you pair Dexamethasone with nebulized Epinephrine.",
+      guidelineTitle: "Canadian Paediatric Society (CPS): Managing Croup",
+      guidelineUrl: "https://cps.ca/en/documents/position/acute-management-of-croup"
+    },
+    {
+      id: "f2_1",
+      floor: "floor2",
+      topic: "Cardiology / Hypertension",
+      scenario: "A 58-year-old patient with no diabetes or CKD has an automated office blood pressure (AOBP) of 146/92 mmHg at today's visit. He feels well and has no target organ damage. To confirm a diagnosis of hypertension per Hypertension Canada guidelines, what is the best next step?",
+      options: [
+        "Start Amlodipine 5mg daily and recheck in 6 months",
+        "Arrange out-of-office BP assessment (24h ABPM or home BP monitoring series)",
+        "Diagnose hypertension immediately based on this single visit",
+        "Order a renal artery Doppler ultrasound first"
+      ],
+      correct: 1,
+      aiRight: "NEW ACHIEVEMENT! 'White-Coat Detector!' You confirmed the diagnosis with out-of-office readings before sentencing him to lifelong pills!",
+      aiWrong: "TRAP TRIGGERED! Unless BP is ≥180/110 mmHg or there's hypertensive urgency/target organ damage, you don't diagnose on Visit 1 without out-of-office confirmation!",
+      donutRight: "Obviously his blood pressure is high, Carl—he's in a fluorescent-lit clinic! Check it at home where there's a cat on his lap!",
+      donutWrong: "CARL! You're diagnosing him off ONE reading?! Even my groomer takes two measurements before trimming my whiskers!",
+      mordecai: "Per Hypertension Canada: If Visit 1 AOBP is 140–179 / 90–109 mmHg, out-of-office measurement (ABPM or HBPM) is preferred before Visit 2 to rule out white-coat hypertension (Diagnostic thresholds: ABPM awake mean ≥135/85 or 24h ≥130/80; HBPM ≥135/85).",
+      guidelineTitle: "Hypertension Canada Guidelines",
+      guidelineUrl: "https://guidelines.hypertension.ca/diagnosis-assessment/measuring-blood-pressure/"
+    },
+    {
+      id: "f2_2",
+      floor: "floor2",
+      topic: "Preventive Care / Oncology",
+      scenario: "A 23-year-old immunocompetent patient who has had two sexual partners asks for her first routine cervical cancer screening test in Ontario. She is completely asymptomatic with no history of cervical dysplasia. What do you advise?",
+      options: [
+        "Perform cervical screening today since she is over 21",
+        "Initiate routine cervical screening starting at age 25",
+        "Perform a pelvic bimanual exam every year starting today",
+        "Screen only if she has not received the HPV9 vaccine"
+      ],
+      correct: 1,
+      aiRight: "NEW ACHIEVEMENT! 'Screening Maestro!' You waited until age 25 and spared a 23-year-old unnecessary colposcopy for transient HPV!",
+      aiWrong: "OVER-SCREENING ALERT! Both the CTFPHC and Ontario Health (Cancer Care Ontario) updated the starting age for routine cervical screening to 25!",
+      donutRight: "Age twenty-five, Carl! Read the Ontario Health scrolls! Nobody wants an early speculum when it doesn't improve outcomes!",
+      donutWrong: "MONGO IS APPALLED! You're using outdated screening ages, Carl! It starts at 25 in Ontario now!",
+      mordecai: "Both the Canadian Task Force on Preventive Health Care (CTFPHC) and Ontario Health (Cancer Care Ontario) Cervical Screening Program recommend starting routine cervical screening at age 25 (regardless of HPV vaccination status) for asymptomatic, immunocompetent individuals.",
+      guidelineTitle: "Ontario Health (Cancer Care Ontario) Cervical Screening",
+      guidelineUrl: "https://www.cancercareontario.ca/en/types-of-cancer/cervical/screening"
+    }
+  ];
+
+  // GAME STATE
+  let activeDeck = [];
+  let currentIdx = 0;
+  let score = 0;
+  let timerEnabled = true;
+  let timerInterval = null;
+  let timeLeft = 30;
+  
+  // Tracks answers in current run so Back/Next buttons remember your choices!
+  let answeredHistory = {}; 
+  // Tracks missed topics across runs
+  let missedQuestionIds = new Set();
+  let weakTopics = new Set();
+
+  function showMenu() {
+    clearInterval(timerInterval);
+    document.getElementById("menu-screen").style.display = "block";
+    document.getElementById("game-screen").style.display = "none";
+    document.getElementById("forge-screen").style.display = "none";
+    document.getElementById("menu-btn").style.display = "none";
+    updateWeakSpotsDisplay();
+  }
+
+  function toggleTimerSetting() {
+    timerEnabled = !timerEnabled;
+    const btn = document.getElementById("timer-toggle-btn");
+    btn.innerText = timerEnabled ? "ON" : "OFF";
+    btn.style.borderColor = timerEnabled ? "#3fb950" : "#8b949e";
+  }
+
+  function updateWeakSpotsDisplay() {
+    const el = document.getElementById("weak-spots-text");
+    if (weakTopics.size === 0) {
+      el.innerText = "None yet! Play a floor to test yourself.";
+      el.style.color = "#3fb950";
+    } else {
+      el.innerText = Array.from(weakTopics).join(", ");
+      el.style.color = "#f85149";
+    }
+  }
+
+  function clearStats() {
+    missedQuestionIds.clear();
+    weakTopics.clear();
+    score = 0;
+    document.getElementById("score").innerText = "0";
+    updateWeakSpotsDisplay();
+  }
+
+  function startFloor(floorName) {
+    if (floorName === "weaknesses") {
+      activeDeck = allQuestions.filter(q => missedQuestionIds.has(q.id));
+      if (activeDeck.length === 0) {
+        alert("You haven't missed any questions yet! Play Floor 1 or Floor 2 first, or miss one on purpose to test the Boss Room.");
+        return;
+      }
+    } else {
+      activeDeck = allQuestions.filter(q => q.floor === floorName);
+    }
+
+    currentIdx = 0;
+    answeredHistory = {};
+    document.getElementById("menu-screen").style.display = "none";
+    document.getElementById("forge-screen").style.display = "none";
+    document.getElementById("game-screen").style.display = "block";
+    document.getElementById("menu-btn").style.display = "inline-block";
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    clearInterval(timerInterval);
+    const q = activeDeck[currentIdx];
+    
+    document.getElementById("topic-tag").innerText = q.topic;
+    document.getElementById("case-num").innerText = currentIdx + 1;
+    document.getElementById("case-total").innerText = activeDeck.length;
+    document.getElementById("scenario-text").innerText = q.scenario;
+    
+    // Update Back / Next buttons
+    document.getElementById("prev-btn").disabled = (currentIdx === 0);
+    document.getElementById("next-btn").innerText = (currentIdx === activeDeck.length - 1) ? "Finish Floor 🏁" : "Next Case ➔";
+
+    const container = document.getElementById("options-container");
+    container.innerHTML = "";
+
+    const previousAnswer = answeredHistory[q.id];
+
+    q.options.forEach((optText, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "option-btn";
+      btn.innerText = optText;
+      
+      if (previousAnswer !== undefined) {
+        btn.disabled = true;
+        if (idx === q.correct) btn.classList.add("correct");
+        if (idx === previousAnswer && previousAnswer !== q.correct) btn.classList.add("wrong");
+      } else {
+        btn.onclick = () => checkAnswer(idx);
+      }
+      container.appendChild(btn);
+    });
+
+    // If already answered, show feedback immediately without starting timer
+    if (previousAnswer !== undefined) {
+      document.getElementById("timer-wrapper").style.display = "none";
+      renderFeedback(q, previousAnswer === q.correct, previousAnswer === -1);
+    } else {
+      document.getElementById("feedback-area").style.display = "none";
+      if (timerEnabled) {
+        startTimer();
+      } else {
+        document.getElementById("timer-wrapper").style.display = "none";
+      }
+    }
+  }
+
+  function startTimer() {
+    document.getElementById("timer-wrapper").style.display = "block";
+    timeLeft = 30;
+    updateTimerUI();
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      updateTimerUI();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        checkAnswer(-1); // -1 means timed out!
+      }
+    }, 1000);
+  }
+
+  function updateTimerUI() {
+    const fill = document.getElementById("timer-fill");
+    const text = document.getElementById("timer-text");
+    const pct = (timeLeft / 30) * 100;
+    fill.style.width = pct + "%";
+    text.innerText = timeLeft + "s remaining";
+    if (timeLeft > 15) fill.style.backgroundColor = "#3fb950";
+    else if (timeLeft > 7) fill.style.backgroundColor = "#d29922";
+    else fill.style.backgroundColor = "#f85149";
+  }
+
+  function checkAnswer(selectedIdx) {
+    clearInterval(timerInterval);
+    const q = activeDeck[currentIdx];
+    answeredHistory[q.id] = selectedIdx;
+
+    const buttons = document.querySelectorAll(".option-btn");
+    buttons.forEach((b, idx) => {
+      b.disabled = true;
+      if (idx === q.correct) b.classList.add("correct");
+      if (idx === selectedIdx && selectedIdx !== q.correct) b.classList.add("wrong");
+    });
+
+    const isCorrect = (selectedIdx === q.correct);
+    if (isCorrect) {
+      score += 100;
+      document.getElementById("score").innerText = score;
+      missedQuestionIds.delete(q.id);
+    } else {
+      missedQuestionIds.add(q.id);
+      weakTopics.add(q.topic);
+    }
+
+    renderFeedback(q, isCorrect, selectedIdx === -1);
+  }
+
+  function renderFeedback(q, isCorrect, timedOut) {
+    if (timedOut) {
+      document.getElementById("ai-text").innerText = "⏰ TIME'S UP, CRAWLER! The patient left the walk-in clinic and wrote a 1-star Google review! " + q.aiWrong;
+      document.getElementById("donut-text").innerText = "CARL! YOU FROZE! NEVER FREEZE IN THE DUNGEON! " + q.donutWrong;
+    } else if (isCorrect) {
+      document.getElementById("ai-text").innerText = q.aiRight;
+      document.getElementById("donut-text").innerText = q.donutRight;
+    } else {
+      document.getElementById("ai-text").innerText = q.aiWrong;
+      document.getElementById("donut-text").innerText = q.donutWrong;
+    }
+
+    document.getElementById("mordecai-text").innerText = q.mordecai;
+    const link = document.getElementById("guideline-link");
+    link.innerText = "📄 " + q.guidelineTitle + " ↗";
+    link.href = q.guidelineUrl;
+    document.getElementById("feedback-area").style.display = "block";
+  }
+
+  function prevQuestion() {
+    if (currentIdx > 0) {
+      currentIdx--;
+      loadQuestion();
+    }
+  }
+
+  function nextQuestion() {
+    if (currentIdx < activeDeck.length - 1) {
+      currentIdx++;
+      loadQuestion();
+    } else {
+      showMenu();
+    }
+  }
+
+  // AI QUESTION FORGE FUNCTIONS
+  function showForge() {
+    document.getElementById("menu-screen").style.display = "none";
+    document.getElementById("forge-screen").style.display = "block";
+    document.getElementById("menu-btn").style.display = "inline-block";
+
+    const topicsToTarget = weakTopics.size > 0 
+      ? Array.from(weakTopics).join(", ") 
+      : "Canadian Family Medicine high-yield licensing exam topics (e.g., Diabetes Canada, CCS Atrial Fibrillation, Pediatric Fever, or OB/GYN)";
+
+    const promptText = `Generate 2 new clinical multiple-choice scenarios for my Dungeon Crawler Carl-themed Canadian Family Medicine exam game focusing on: ${topicsToTarget}.
+Use Canadian / Ontario guidelines. Output ONLY valid JSON as an array of objects with this exact structure (no markdown backticks):
+[
+  {
+    "id": "custom_1",
+    "floor": "custom",
+    "topic": "Topic Name",
+    "scenario": "Clinical scenario text...",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "correct": 0,
+    "aiRight": "Snarky System AI praise...",
+    "aiWrong": "Snarky System AI roast...",
+    "donutRight": "Princess Donut ALL CAPS praise...",
+    "donutWrong": "Princess Donut ALL CAPS outrage...",
+    "mordecai": "High-yield CCFP exam clinical pearl...",
+    "guidelineTitle": "Name of Canadian Guideline",
+    "guidelineUrl": "https://..."
+  }
+]`;
+    document.getElementById("ai-prompt-box").value = promptText;
+  }
+
+  function copyPrompt() {
+    const box = document.getElementById("ai-prompt-box");
+    box.select();
+    navigator.clipboard.writeText(box.value);
+    alert("Prompt copied! Paste it into Gemini to generate new cases on the fly.");
+  }
+
+  function importCustomQuestions() {
+    const raw = document.getElementById("ai-import-box").value.trim();
+    if (!raw) return alert("Paste the JSON from the AI first!");
+    try {
+      const cleaned = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+      const newCases = JSON.parse(cleaned);
+      newCases.forEach((c, i) => {
+        c.id = "custom_" + Date.now() + "_" + i;
+        c.floor = "custom";
+        allQuestions.push(c);
+      });
+      activeDeck = newCases;
+      currentIdx = 0;
+      answeredHistory = {};
+      document.getElementById("forge-screen").style.display = "none";
+      document.getElementById("game-screen").style.display = "block";
+      loadQuestion();
+    } catch (e) {
+      alert("Oops! Make sure you pasted only the [ ... ] JSON block from the AI.");
+    }
+  }
+</script>
+
+</body>
+</html>

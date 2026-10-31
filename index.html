@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clinic Blitz: Dungeon Crawler Edition v3</title>
+  <title>Clinic Blitz: Dungeon Crawler Edition v3.1</title>
   <style>
     * { box-sizing: border-box; font-family: 'Courier New', Courier, monospace; }
     body {
@@ -50,6 +50,16 @@
       font-weight: bold;
     }
     .nav-top-btn:hover { background: #30363d; }
+    .timer-select {
+      background: #21262d;
+      color: #e6edf3;
+      border: 1px solid #58a6ff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
     .stats {
       background: #21262d;
       padding: 6px 12px;
@@ -108,6 +118,8 @@
       border: 1px solid #30363d;
       margin-bottom: 12px;
       font-size: 0.9rem;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     /* LOOT BOX POPUP BANNER */
@@ -128,30 +140,33 @@
       to { box-shadow: 0 0 18px rgba(255, 215, 0, 0.8); }
     }
 
-    /* TIMER BAR */
-    .timer-wrapper {
-      margin-bottom: 14px;
-      background: #0d1117;
+    /* SUBTLE COMPACT TIMER PILL */
+    .question-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .meta-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .subtle-timer {
+      background: #21262d;
       border: 1px solid #30363d;
-      border-radius: 6px;
-      overflow: hidden;
-      height: 24px;
-      position: relative;
-    }
-    .timer-fill {
-      background: #3fb950;
-      height: 100%;
-      width: 100%;
-      transition: width 1s linear, background-color 0.3s;
-    }
-    .timer-text {
-      position: absolute;
-      top: 2px;
-      left: 10px;
-      font-size: 0.85rem;
+      color: #8b949e;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.82rem;
       font-weight: bold;
-      color: #ffffff;
-      text-shadow: 1px 1px 2px #000;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .subtle-timer.low-time {
+      color: #f0883e;
+      border-color: #f0883e;
     }
 
     /* QUESTION AREA */
@@ -159,11 +174,10 @@
       display: inline-block;
       background: #30363d;
       color: #f0883e;
-      padding: 3px 8px;
+      padding: 4px 9px;
       border-radius: 4px;
       font-size: 0.8rem;
       font-weight: bold;
-      margin-bottom: 8px;
     }
     .scenario-box {
       background: #0d1117;
@@ -266,7 +280,7 @@
 <div class="game-container">
   <!-- TOP HEADER -->
   <div class="header">
-    <div class="title" onclick="showMenu()">⚔️ Clinic Blitz v3</div>
+    <div class="title" onclick="showMenu()">⚔️ Clinic Blitz v3.1</div>
     <div class="stats">
       Score: <span id="score">0</span> | 🔥 Streak: <span id="streak">0</span> | 🎁 Loot: <span id="loot-count">0</span>
     </div>
@@ -277,12 +291,18 @@
   <div id="menu-screen">
     <div class="menu-hero">
       <h1>DUNGEON CRAWLER: CCFP EDITION</h1>
-      <p>"Welcome to the Dungeon of Canadian Primary Care. Everything you import or miss is now saved permanently!"</p>
+      <p>"Welcome to the Dungeon of Canadian Primary Care. Everything you import or miss is saved automatically!"</p>
     </div>
 
     <div class="settings-bar">
-      <span>⏱️ <strong>Blitz Timer (30s per case):</strong></span>
-      <button class="nav-top-btn" id="timer-toggle-btn" onclick="toggleTimerSetting()">ON</button>
+      <span>⏱️ <strong>Case Timer Duration:</strong></span>
+      <select id="timer-select" class="timer-select" onchange="changeTimerDuration()">
+        <option value="60">60s (1 Min - Standard)</option>
+        <option value="90">90s (1.5 Min - Relaxed)</option>
+        <option value="120">120s (2 Min - Deep Read)</option>
+        <option value="30">30s (Fast Blitz)</option>
+        <option value="0">Off (Untimed)</option>
+      </select>
     </div>
 
     <div class="settings-bar">
@@ -337,14 +357,12 @@
   <div id="game-screen" style="display:none;">
     <div id="loot-banner" class="loot-banner"></div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <div class="question-meta-bar">
       <span class="topic-tag" id="topic-tag">Topic</span>
-      <span style="font-size:0.9rem; color:#8b949e;">Case <span id="case-num">1</span> of <span id="case-total">3</span></span>
-    </div>
-
-    <div class="timer-wrapper" id="timer-wrapper">
-      <div class="timer-fill" id="timer-fill"></div>
-      <div class="timer-text" id="timer-text">30s remaining</div>
+      <div class="meta-right">
+        <span class="subtle-timer" id="subtle-timer">⏱️ 60s</span>
+        <span style="font-size:0.88rem; color:#8b949e;">Case <span id="case-num">1</span> of <span id="case-total">3</span></span>
+      </div>
     </div>
 
     <div class="scenario-box" id="scenario-text"></div>
@@ -549,13 +567,16 @@
   let score = parseInt(localStorage.getItem("cb_score") || "0", 10);
   let streak = parseInt(localStorage.getItem("cb_streak") || "0", 10);
   let lootCount = parseInt(localStorage.getItem("cb_loot") || "0", 10);
+  let timerDuration = parseInt(localStorage.getItem("cb_timer_duration") || "60", 10);
 
   let activeDeck = [];
   let currentIdx = 0;
-  let timerEnabled = true;
   let timerInterval = null;
-  let timeLeft = 30;
+  let timeLeft = 60;
   let answeredHistory = {};
+
+  // Sync dropdown to saved duration on load
+  document.getElementById("timer-select").value = timerDuration.toString();
 
   function saveStateToDisk() {
     localStorage.setItem("cb_custom_questions", JSON.stringify(savedCustomQuestions));
@@ -564,6 +585,12 @@
     localStorage.setItem("cb_score", score.toString());
     localStorage.setItem("cb_streak", streak.toString());
     localStorage.setItem("cb_loot", lootCount.toString());
+    localStorage.setItem("cb_timer_duration", timerDuration.toString());
+  }
+
+  function changeTimerDuration() {
+    timerDuration = parseInt(document.getElementById("timer-select").value, 10);
+    saveStateToDisk();
   }
 
   function updateHeaderUI() {
@@ -580,13 +607,6 @@
     document.getElementById("menu-btn").style.display = "none";
     updateWeakSpotsDisplay();
     updateHeaderUI();
-  }
-
-  function toggleTimerSetting() {
-    timerEnabled = !timerEnabled;
-    const btn = document.getElementById("timer-toggle-btn");
-    btn.innerText = timerEnabled ? "ON" : "OFF";
-    btn.style.borderColor = timerEnabled ? "#3fb950" : "#8b949e";
   }
 
   function updateWeakSpotsDisplay() {
@@ -612,6 +632,8 @@
     score = 0;
     streak = 0;
     lootCount = 0;
+    timerDuration = 60;
+    document.getElementById("timer-select").value = "60";
     updateHeaderUI();
     updateWeakSpotsDisplay();
   }
@@ -675,22 +697,24 @@
       container.appendChild(btn);
     });
 
+    const timerBadge = document.getElementById("subtle-timer");
     if (previousAnswer !== undefined) {
-      document.getElementById("timer-wrapper").style.display = "none";
+      timerBadge.style.display = "none";
       renderFeedback(q, previousAnswer === q.correct, previousAnswer === -1);
     } else {
       document.getElementById("feedback-area").style.display = "none";
-      if (timerEnabled) {
+      if (timerDuration > 0) {
         startTimer();
       } else {
-        document.getElementById("timer-wrapper").style.display = "none";
+        timerBadge.style.display = "none";
       }
     }
   }
 
   function startTimer() {
-    document.getElementById("timer-wrapper").style.display = "block";
-    timeLeft = 30;
+    const timerBadge = document.getElementById("subtle-timer");
+    timerBadge.style.display = "inline-block";
+    timeLeft = timerDuration;
     updateTimerUI();
     timerInterval = setInterval(() => {
       timeLeft--;
@@ -703,14 +727,13 @@
   }
 
   function updateTimerUI() {
-    const fill = document.getElementById("timer-fill");
-    const text = document.getElementById("timer-text");
-    const pct = (timeLeft / 30) * 100;
-    fill.style.width = pct + "%";
-    text.innerText = timeLeft + "s remaining";
-    if (timeLeft > 15) fill.style.backgroundColor = "#3fb950";
-    else if (timeLeft > 7) fill.style.backgroundColor = "#d29922";
-    else fill.style.backgroundColor = "#f85149";
+    const timerBadge = document.getElementById("subtle-timer");
+    timerBadge.innerText = "⏱️ " + timeLeft + "s";
+    if (timeLeft <= 10) {
+      timerBadge.classList.add("low-time");
+    } else {
+      timerBadge.classList.remove("low-time");
+    }
   }
 
   function checkAnswer(selectedIdx) {
@@ -824,7 +847,6 @@ Use Canadian / Ontario guidelines. Output ONLY valid JSON as an array of objects
     alert("Prompt copied! Paste it into Gemini to generate your new cases.");
   }
 
-  // BULLETPROOF JSON REPAIR & PERMANENT SAVE
   function importCustomQuestions() {
     let raw = document.getElementById("ai-import-box").value.trim();
     if (!raw) return alert("Paste the JSON from the AI first!");

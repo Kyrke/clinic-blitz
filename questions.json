@@ -133,7 +133,7 @@
     "correct": 1,
     "aiRight": "NEW ACHIEVEMENT! 'Nephron Bodyguard!' You protected those diabetic glomeruli with an ACEi/ARB and nailed the <130/80 target!",
     "aiWrong": "NEPHROLOGY WEEPS! A patient with diabetes had protein in his urine and you didn't reach for an ACE inhibitor or ARB, Crawler!",
-      "donutRight": "PROTECT THE KIDNEYS, CARL! Everyone knows diabetes gets the <130/80 target and an ACE or ARB!",
+    "donutRight": "PROTECT THE KIDNEYS, CARL! Everyone knows diabetes gets the <130/80 target and an ACE or ARB!",
     "donutWrong": "CARL! HIS KIDNEYS ARE LEAKING PROTEIN AND YOU PICKED THE WRONG POTION! Read the Hypertension Canada scroll again!",
     "mordecai": "In patients with Diabetes Mellitus, the Hypertension Canada BP target is <130/80 mmHg. First-line therapy in diabetes—especially with microalbuminuria/CKD—is an ACE inhibitor or ARB (never combine an ACEi and ARB together).",
     "guidelineTitle": "Hypertension Canada: Treatment in Diabetes",

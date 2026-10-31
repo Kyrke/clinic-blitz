@@ -1,0 +1,142 @@
+[
+  {
+    "id": "f1_1",
+    "floor": "Floor 1: Acute Walk-In & Choosing Wisely",
+    "topic": "MSK / Low Back Pain",
+    "scenario": "A 42-year-old warehouse worker stumbles into clinic with 4 days of acute paraspinal low back pain after lifting a heavy crate. No saddle anesthesia, no bowel/bladder symptoms, no fever, normal neuro exam. He demands an urgent lumbar MRI. What is your move, Crawler?",
+    "options": [
+      "Order a stat Lumbosacral MRI to appease him",
+      "Order plain X-rays of the lumbar spine first",
+      "Reassure, advise staying active, and recommend NSAIDs/acetaminophen without imaging",
+      "Prescribe a 10-day course of oral prednisone and strict bed rest"
+    ],
+    "correct": 2,
+    "aiRight": "NEW ACHIEVEMENT! 'Radiology Gatekeeper!' You protected OHIP from another useless lumbar spine scan!",
+    "aiWrong": "NEW ACHIEVEMENT! 'Incidentaloma Hunter!' You ordered unnecessary spinal imaging! Enjoy explaining an irrelevant bulging disc for the next 6 years!",
+    "donutRight": "CARL! LOOK! HE ACTUALLY READ THE CHOOSING WISELY SCROLLS! Even Mongo knows you don't image uncomplicated back pain before 6 weeks!",
+    "donutWrong": "REALLY, CARL?! IMAGING ON DAY FOUR WITH ZERO RED FLAGS?! MONGO IS APPALLED!",
+    "mordecai": "Acute mechanical low back pain (<6 weeks) without red flags (cauda equina, fracture, cancer, infection) does not warrant imaging. First-line is reassurance, staying active (avoid bed rest), and simple analgesia.",
+    "guidelineTitle": "Choosing Wisely Canada & Ontario CEP: Low Back Pain",
+    "guidelineUrl": "https://choosingwiselycanada.org/recommendation/family-medicine/"
+  },
+  {
+    "id": "f1_2",
+    "floor": "Floor 1: Acute Walk-In & Choosing Wisely",
+    "topic": "Infectious Disease / Geriatrics",
+    "scenario": "A 74-year-old retired wizard living independently comes in for a routine BP check. His daughter asked for a urine culture because his urine 'smelled funny.' It grows >10^8 CFU/L of E. coli. He has zero dysuria, frequency, urgency, delirium, or fever. What do you do?",
+    "options": [
+      "Prescribe Nitrofurantoin 100mg BID for 5 days",
+      "Prescribe TMP-SMX DS BID for 3 days",
+      "Do not treat with antibiotics; educate on asymptomatic bacteriuria",
+      "Repeat the urine culture in 48 hours to confirm clearance"
+    ],
+    "correct": 2,
+    "aiRight": "NEW ACHIEVEMENT! 'Defender of the Microbiome!' You left peaceful bladder bacteria alone! No C. diff for Grandpa today!",
+    "aiWrong": "BZZZZT! You just nuked harmless colonizing bacteria! Somewhere in the dungeon, multi-drug resistant E. coli just leveled up!",
+    "donutRight": "THANK GOODNESS. If people prescribed me pills every time my litter box smelled funny, I'd be glowing in the dark, Carl!",
+    "donutWrong": "CARL, HE DOESN'T EVEN HAVE SYMPTOMS! Why are you throwing potions at a healthy wizard?! UNACCEPTABLE!",
+    "mordecai": "Never screen for or treat asymptomatic bacteriuria in non-pregnant adults, older adults, or catheterized patients. Only screen and treat in pregnancy or prior to urologic procedures with mucosal bleeding.",
+    "guidelineTitle": "Choosing Wisely Canada / AMMI Canada: Asymptomatic Bacteriuria",
+    "guidelineUrl": "https://choosingwiselycanada.org/pamphlet/antibiotics-for-urinary-tract-infections-in-older-people/"
+  },
+  {
+    "id": "f1_3",
+    "floor": "Floor 1: Acute Walk-In & Choosing Wisely",
+    "topic": "Pediatrics / Respirology",
+    "scenario": "A 3-year-old wakes up at 2:00 AM with a seal-like barking cough, hoarse voice, and inspiratory stridor at rest. Temp is 38.2°C. He is alert and not cyanotic. What is the single most critical medication to administer in every case of croup?",
+    "options": [
+      "Salbutamol (Ventolin) via MDI with spacer",
+      "Single dose of oral Dexamethasone (0.6 mg/kg)",
+      "Oral Amoxicillin 80 mg/kg/day",
+      "Nebulized hypertonic saline alone"
+    ],
+    "correct": 1,
+    "aiRight": "NEW ACHIEVEMENT! 'Silencer of the Barking Seal!' Corticosteroids reduce subglottic edema within hours!",
+    "aiWrong": "OOF! That's viral croup, Crawler! Subglottic swelling doesn't care about your salbutamol or amoxicillin!",
+    "donutRight": "FINALLY! That barking noise sounded dangerously close to a Cocker Spaniel, Carl. Fix it immediately!",
+    "donutWrong": "IS THAT A DOG BARKING?! CARL, STOP GIVING IT ASTHMA PUFFERS AND USE DEXAMETHASONE!",
+    "mordecai": "All children with croup (mild, moderate, or severe) should receive a single dose of oral Dexamethasone (0.6 mg/kg, max 10-12 mg). Because this child also has stridor at rest (moderate/severe), you pair Dexamethasone with nebulized Epinephrine.",
+    "guidelineTitle": "Canadian Paediatric Society (CPS): Managing Croup",
+    "guidelineUrl": "https://cps.ca/en/documents/position/acute-management-of-croup"
+  },
+  {
+    "id": "f2_1",
+    "floor": "Floor 2: Chronic Disease & Ontario Screening",
+    "topic": "Cardiology / Hypertension",
+    "scenario": "A 58-year-old patient with no diabetes or CKD has an automated office blood pressure (AOBP) of 146/92 mmHg at today's visit. He feels well and has no target organ damage. To confirm a diagnosis of hypertension per Hypertension Canada guidelines, what is the best next step?",
+    "options": [
+      "Start Amlodipine 5mg daily and recheck in 6 months",
+      "Arrange out-of-office BP assessment (24h ABPM or home BP monitoring series)",
+      "Diagnose hypertension immediately based on this single visit",
+      "Order a renal artery Doppler ultrasound first"
+    ],
+    "correct": 1,
+    "aiRight": "NEW ACHIEVEMENT! 'White-Coat Detector!' You confirmed the diagnosis with out-of-office readings before sentencing him to lifelong pills!",
+    "aiWrong": "TRAP TRIGGERED! Unless BP is >=180/110 mmHg or there's hypertensive urgency/target organ damage, you don't diagnose on Visit 1 without out-of-office confirmation!",
+    "donutRight": "Obviously his blood pressure is high, Carl—he's in a fluorescent-lit clinic! Check it at home where there's a cat on his lap!",
+    "donutWrong": "CARL! You're diagnosing him off ONE reading?! Even my groomer takes two measurements before trimming my whiskers!",
+    "mordecai": "Per Hypertension Canada: If Visit 1 AOBP is 140–179 / 90–109 mmHg, out-of-office measurement (ABPM or HBPM) is preferred before Visit 2 to rule out white-coat hypertension (Diagnostic thresholds: ABPM awake mean >=135/85 or 24h >=130/80; HBPM >=135/85).",
+    "guidelineTitle": "Hypertension Canada Guidelines",
+    "guidelineUrl": "https://guidelines.hypertension.ca/diagnosis-assessment/measuring-blood-pressure/"
+  },
+  {
+    "id": "f2_2",
+    "floor": "Floor 2: Chronic Disease & Ontario Screening",
+    "topic": "Preventive Care / Oncology",
+    "scenario": "A 23-year-old immunocompetent patient who has had two sexual partners asks for her first routine cervical cancer screening test in Ontario. She is completely asymptomatic with no history of cervical dysplasia. What do you advise?",
+    "options": [
+      "Perform cervical screening today since she is over 21",
+      "Initiate routine cervical screening starting at age 25",
+      "Perform a pelvic bimanual exam every year starting today",
+      "Screen only if she has not received the HPV9 vaccine"
+    ],
+    "correct": 1,
+    "aiRight": "NEW ACHIEVEMENT! 'Screening Maestro!' You waited until age 25 and spared a 23-year-old unnecessary colposcopy for transient HPV!",
+    "aiWrong": "OVER-SCREENING ALERT! Both the CTFPHC and Ontario Health (Cancer Care Ontario) updated the starting age for routine cervical screening to 25!",
+    "donutRight": "Age twenty-five, Carl! Read the Ontario Health scrolls! Nobody wants an early speculum when it doesn't improve outcomes!",
+    "donutWrong": "MONGO IS APPALLED! You're using outdated screening ages, Carl! It starts at 25 in Ontario now!",
+    "mordecai": "Both the Canadian Task Force on Preventive Health Care (CTFPHC) and Ontario Health (Cancer Care Ontario) Cervical Screening Program recommend starting routine cervical screening at age 25 (regardless of HPV vaccination status) for asymptomatic, immunocompetent individuals.",
+    "guidelineTitle": "Ontario Health (Cancer Care Ontario) Cervical Screening",
+    "guidelineUrl": "https://www.cancercareontario.ca/en/types-of-cancer/cervical/screening"
+  },
+  {
+    "id": "f2_3",
+    "floor": "Floor 2: Chronic Disease & Ontario Screening",
+    "topic": "Cardiology / Atrial Fibrillation",
+    "scenario": "A 71-year-old dungeon blacksmith presents with newly diagnosed non-valvular atrial fibrillation. He has hypertension and Type 2 diabetes, no prior stroke, and normal renal function. He asks if he can just take a daily Baby Aspirin (ASA 81mg) to prevent a stroke. Per Canadian Cardiovascular Society (CCS) guidelines, what do you advise?",
+    "options": [
+      "Agree to ASA 81mg daily since his stroke risk is moderate",
+      "Start a Direct Oral Anticoagulant (DOAC) such as Apixaban or Rivaroxaban",
+      "Start Warfarin targeting an INR of 2.0 to 3.0 as first-line over DOACs",
+      "Start dual antiplatelet therapy with ASA 81mg and Clopidogrel 75mg"
+    ],
+    "correct": 1,
+    "aiRight": "NEW ACHIEVEMENT! 'CHADS-65 Champion!' You tossed the baby aspirin in the trash and gave him real stroke protection!",
+    "aiWrong": "STROKE HAZARD! Using aspirin alone for AFib stroke prevention is like wearing a paper helmet against a Boss Goblin!",
+    "donutRight": "CARL! EVEN I KNOW THE CANADIAN CHADS-65 ALGORITHM! He's over 65 with hypertension and diabetes—give the man a proper DOAC!",
+    "donutWrong": "ASPIRIN FOR ATRIAL FIBRILLATION?! MONGO IS APPALLED! What year is it, Carl, 1998?!",
+    "mordecai": "Under the CCS 'CHADS-65' algorithm, any patient with non-valvular AFib who is age >=65 OR has any CHADS2 risk factor (CHF, Hypertension, Diabetes, prior Stroke/TIA) should receive oral anticoagulation. DOACs are strongly preferred over Warfarin. Aspirin monotherapy is NOT recommended.",
+    "guidelineTitle": "CCS Atrial Fibrillation Guidelines (CHADS-65)",
+    "guidelineUrl": "https://ccs.ca/guideline/2020-atrial-fibrillation/"
+  },
+  {
+    "id": "f2_4",
+    "floor": "Floor 2: Chronic Disease & Ontario Screening",
+    "topic": "Cardiology / Hypertension",
+    "scenario": "A 52-year-old elf rogue with Type 2 diabetes and microalbuminuria is diagnosed with hypertension (BP 148/92 mmHg). His potassium and creatinine are normal. Per Hypertension Canada and Diabetes Canada guidelines, what is both his target blood pressure and preferred first-line medication?",
+    "options": [
+      "Target <140/90 mmHg; start a beta-blocker (Metoprolol)",
+      "Target <130/80 mmHg; start an ACE inhibitor or ARB",
+      "Target <120/80 mmHg; start a loop diuretic (Furosemide)",
+      "Target <140/90 mmHg; start a thiazide diuretic alone"
+    ],
+    "correct": 1,
+    "aiRight": "NEW ACHIEVEMENT! 'Nephron Bodyguard!' You protected those diabetic glomeruli with an ACEi/ARB and nailed the <130/80 target!",
+    "aiWrong": "NEPHROLOGY WEEPS! A patient with diabetes had protein in his urine and you didn't reach for an ACE inhibitor or ARB, Crawler!",
+      "donutRight": "PROTECT THE KIDNEYS, CARL! Everyone knows diabetes gets the <130/80 target and an ACE or ARB!",
+    "donutWrong": "CARL! HIS KIDNEYS ARE LEAKING PROTEIN AND YOU PICKED THE WRONG POTION! Read the Hypertension Canada scroll again!",
+    "mordecai": "In patients with Diabetes Mellitus, the Hypertension Canada BP target is <130/80 mmHg. First-line therapy in diabetes—especially with microalbuminuria/CKD—is an ACE inhibitor or ARB (never combine an ACEi and ARB together).",
+    "guidelineTitle": "Hypertension Canada: Treatment in Diabetes",
+    "guidelineUrl": "https://guidelines.hypertension.ca/treatment/diabetes-mellitus/"
+  }
+]
